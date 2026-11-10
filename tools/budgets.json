@@ -1,0 +1,7 @@
+{
+  "download_mb": 30,
+  "idle_ram_mb": 70,
+  "active_ram_mb": 200,
+  "idle_battery_pct_per_day": 5,
+  "cold_start_s": 1.5
+}

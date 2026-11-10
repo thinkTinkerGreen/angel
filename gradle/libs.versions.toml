@@ -1,0 +1,17 @@
+# UNVERIFIED: placeholder versions. At task F-01 the agent/human must verify the latest stable
+# AGP, Kotlin, Compose BOM and WebRTC artifact, then record them in docs/DECISIONS.md.
+[versions]
+agp = "UNVERIFIED-set-at-F-01"
+kotlin = "UNVERIFIED-set-at-F-01"
+composeBom = "UNVERIFIED-set-at-F-01"
+[libraries]
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+activity-compose = { module = "androidx.activity:activity-compose" }
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

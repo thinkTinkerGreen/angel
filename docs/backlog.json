@@ -1,0 +1,1454 @@
+{
+ "items": [
+  {
+   "id": "F-01",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "Repo, folder structure, Gradle multi-module skeleton",
+   "pri": "P0",
+   "size": "M",
+   "module": "repo",
+   "prd": "Sec 6",
+   "deps": [],
+   "status": "review",
+   "card": true,
+   "goal": "Create the module layout and Gradle wiring so every later task touches one module.",
+   "acceptance": [
+    "All modules in settings.gradle.kts exist with MODULE.md and build.gradle.kts",
+    "First CI run succeeds (human confirms green run)",
+    "Versions recorded in DECISIONS.md (done 2026-11-10)",
+    "Package id + minSdk confirmed with human"
+   ],
+   "files": [
+    "README.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "F-02",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "AGENTS.md, PROJECT_SUMMARY.md, task-card template",
+   "pri": "P0",
+   "size": "S",
+   "module": "docs",
+   "prd": "Sec 5.1",
+   "deps": [
+    "F-01"
+   ],
+   "status": "review",
+   "card": true,
+   "goal": "Give any LLM enough context to work in one session.",
+   "acceptance": [
+    "AGENTS.md, PROJECT_SUMMARY.md, DECISIONS.md, CODING_STANDARDS.md exist and are each <= 2 pages",
+    "Agent + slash commands present under .claude/"
+   ],
+   "files": [
+    "docs/PROJECT_SUMMARY.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "F-03",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "Build tools: header checker, context map, size check",
+   "pri": "P0",
+   "size": "M",
+   "module": "tools",
+   "prd": "Sec 5.2",
+   "deps": [
+    "F-01"
+   ],
+   "status": "review",
+   "card": true,
+   "goal": "Automate the conventions so LLM drift is caught.",
+   "acceptance": [
+    "check_headers.py fails on a headerless file and passes on the repo",
+    "gen_context_map.py writes docs/CONTEXT_MAP.md",
+    "check_size.py compares an APK/AAB to budgets.json"
+   ],
+   "files": [
+    "tools/backlog.py",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "F-04",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "CI pipeline: build, lint, tests, budget report",
+   "pri": "P0",
+   "size": "M",
+   "module": "ci",
+   "prd": "Sec 4",
+   "deps": [
+    "F-03"
+   ],
+   "status": "review",
+   "card": true,
+   "goal": "Run checks automatically on every push.",
+   "acceptance": [
+    "Workflow runs header check, context map, Gradle test, assembleDebug",
+    "Debug APK uploaded as artifact 'angel-debug-apk'",
+    "Human confirms first green run on GitHub"
+   ],
+   "files": [
+    ".github/workflows/ci.yml",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "F-08",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "Google Play policy review and declarations plan",
+   "pri": "P0",
+   "size": "S",
+   "module": "docs",
+   "prd": "Sec 9",
+   "deps": [
+    "F-02"
+   ],
+   "status": "review",
+   "card": true,
+   "goal": "Know the Play requirements for screen capture, overlay, foreground services before building.",
+   "acceptance": [
+    "docs/spikes/F-08.md lists applicable policies (MediaProjection, overlay, foreground service types, AccessibilityService for Phase 2) with source links the human verified",
+    "Declarations/disclosures checklist for MVP and Phase 2",
+    "Questions for human listed"
+   ],
+   "files": [
+    "docs/PROJECT_SUMMARY.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "F-09",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "Threat model for misuse (scam, coercion)",
+   "pri": "P0",
+   "size": "M",
+   "module": "docs",
+   "prd": "FR-27..31",
+   "deps": [
+    "F-02"
+   ],
+   "status": "review",
+   "card": true,
+   "goal": "Define abuse cases and the mitigations the MVP must implement.",
+   "acceptance": [
+    "docs/THREAT_MODEL.md: actors, abuse cases, mitigations mapped to backlog IDs",
+    "Safety invariants in AGENTS.md reviewed and extended if needed"
+   ],
+   "files": [
+    "docs/PROJECT_SUMMARY.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "F-12",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "Distribution: signed APK, release hosting, in-app update check",
+   "pri": "P1",
+   "size": "M",
+   "module": "app",
+   "prd": "Decision 2026-10-08",
+   "deps": [
+    "F-04"
+   ],
+   "status": "review",
+   "card": true,
+   "goal": "Initial release is a directly installed APK (no Play approval needed). Define signing, hosting and update flow.",
+   "acceptance": [
+    "Release signing process documented (key stored outside repo, never committed)",
+    "Install guide for Users: allow-unknown-source steps in plain language",
+    "Update check design that adds no idle background work (check only when app is opened)",
+    "Size impact of any update code recorded in DECISIONS.md"
+   ],
+   "files": [
+    "app/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "F-10",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "Design system: colours, type, large-text mode, core components",
+   "pri": "P1",
+   "size": "M",
+   "module": "core/core-ui",
+   "prd": "Sec 5.6",
+   "deps": [
+    "F-01"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "One consistent, accessible UI kit used by all features.",
+   "acceptance": [
+    "Theme (light/dark/high contrast), large-text scaling, primary button, Stop button, status chip, big-card list",
+    "Previews compile; no hard-coded UI values elsewhere"
+   ],
+   "files": [
+    "core/core-ui/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "F-05",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "Spike: MediaProjection + WebRTC screen stream; measure size/RAM/latency",
+   "pri": "P0",
+   "size": "L",
+   "module": "spikes/F-05",
+   "prd": "FR-11",
+   "deps": [
+    "F-01"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Prove screen share works within budgets and learn the real APK cost of WebRTC.",
+   "acceptance": [
+    "Spike app streams User screen to Angel device",
+    "docs/spikes/F-05.md has measurement checklist; human records APK size (arm64), idle/active RAM, latency, 30-min battery",
+    "Conclusion + library choice recorded in DECISIONS.md"
+   ],
+   "files": [
+    "spikes/F-05",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "F-06",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "Spike: signalling + TURN on free tier; document limits",
+   "pri": "P0",
+   "size": "L",
+   "module": "spikes/F-06",
+   "prd": "FR-2,13",
+   "deps": [
+    "F-01"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Choose the signalling/invite backend and relay with real quotas.",
+   "acceptance": [
+    "Compare Cloudflare Workers, Firebase, Supabase (free-tier limits verified by human from official pages)",
+    "Minimal signalling prototype for the shortlisted option",
+    "Provider decision + abstraction note in DECISIONS.md"
+   ],
+   "files": [
+    "spikes/F-06",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "F-07",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "Spike: draw-over-apps overlay for guidance on 4 OEMs",
+   "pri": "P0",
+   "size": "M",
+   "module": "spikes/F-07",
+   "prd": "FR-15",
+   "deps": [
+    "F-01"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Confirm overlay guidance works and is policy-safe across vendors.",
+   "acceptance": [
+    "Spike draws arrow/highlight/text overlay over other apps",
+    "docs/spikes/F-07.md matrix for 4 devices filled by human",
+    "Go/no-go + fallback recorded in DECISIONS.md"
+   ],
+   "files": [
+    "spikes/F-07",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "F-11",
+   "phase": "Phase 0: Foundations and De-risking",
+   "title": "User research: 8-10 older adults and families",
+   "pri": "P1",
+   "size": "L",
+   "module": "docs",
+   "prd": "Sec 2.5",
+   "deps": [
+    "F-02"
+   ],
+   "status": "human",
+   "card": true,
+   "goal": "Validate flows and wording before building UI.",
+   "acceptance": [
+    "Interview guide + prototype test script in docs/research/",
+    "Human runs sessions; findings summary in docs/research/findings.md"
+   ],
+   "files": [
+    "docs/PROJECT_SUMMARY.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-02",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Role selection: User or Angel mode",
+   "pri": "P0",
+   "size": "S",
+   "module": "feature/feature-onboarding",
+   "prd": "FR-1",
+   "deps": [
+    "F-01"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "First-run choice persisted locally.",
+   "acceptance": [
+    "Role stored; changeable in settings",
+    "Unit test for role state"
+   ],
+   "files": [
+    "feature/feature-onboarding/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-03",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Invite generation (link, QR, short code)",
+   "pri": "P0",
+   "size": "M",
+   "module": "feature/feature-pairing",
+   "prd": "FR-2",
+   "deps": [
+    "F-06",
+    "M-02"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "User/Angel can create and redeem an invite.",
+   "acceptance": [
+    "Invite = short code + QR + link, expiring",
+    "Backend call behind core-api InviteService interface",
+    "Tests with fake service"
+   ],
+   "files": [
+    "feature/feature-pairing/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-04",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Pairing with two-sided confirmation",
+   "pri": "P0",
+   "size": "L",
+   "module": "feature/feature-pairing",
+   "prd": "FR-2",
+   "deps": [
+    "M-03"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Both sides must confirm before an Angel is trusted.",
+   "acceptance": [
+    "Pairing state machine with tests",
+    "Both-side confirmation screens (plain language)",
+    "New Angel stored with cool-off start time"
+   ],
+   "files": [
+    "feature/feature-pairing/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-06",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Capability model and permission engine",
+   "pri": "P0",
+   "size": "L",
+   "module": "core/core-permissions",
+   "prd": "FR-5..7",
+   "deps": [
+    "F-01"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Pure-Kotlin rules engine: who may do what, for how long.",
+   "acceptance": [
+    "Capabilities: VIEW_SCREEN, DRAW_GUIDANCE, VOICE_CHAT (MVP) with registry for future ones",
+    "Grants: per-Angel, per-capability, duration; revoke",
+    "No Act capability can be granted in MVP; unit tests for all rules incl. cool-off"
+   ],
+   "files": [
+    "core/core-permissions/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-05",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Multiple Angels and per-Angel permission profile",
+   "pri": "P0",
+   "size": "M",
+   "module": "feature/feature-pairing",
+   "prd": "FR-3",
+   "deps": [
+    "M-04",
+    "M-06"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Manage several Angels, each with own grants.",
+   "acceptance": [
+    "List/add/remove Angels",
+    "Edit grants per Angel (MVP capabilities only)"
+   ],
+   "files": [
+    "feature/feature-pairing/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-07",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Session request and wake-up via push",
+   "pri": "P0",
+   "size": "M",
+   "module": "data/data-push",
+   "prd": "FR-7",
+   "deps": [
+    "F-06",
+    "M-06"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Angel requests a session; User device wakes via FCM only.",
+   "acceptance": [
+    "No persistent socket when idle",
+    "Push -> consent screen deep link",
+    "Rate limit session requests"
+   ],
+   "files": [
+    "data/data-push/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-08",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Per-session consent prompt screen",
+   "pri": "P0",
+   "size": "M",
+   "module": "feature/feature-consent",
+   "prd": "FR-7,10",
+   "deps": [
+    "M-06",
+    "F-10"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Clear prompt: who, what capabilities, Allow/Deny.",
+   "acceptance": [
+    "Large-text friendly; shows Angel identity and requested capabilities",
+    "Result goes through permission engine; audit event emitted",
+    "Pre-approve only low-risk caps for trusted Angel"
+   ],
+   "files": [
+    "feature/feature-consent/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-09",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Foreground service and persistent session indicator",
+   "pri": "P0",
+   "size": "M",
+   "module": "feature/feature-session",
+   "prd": "FR-12",
+   "deps": [
+    "F-05",
+    "M-08"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Service exists only during an active session; indicator cannot be dismissed.",
+   "acceptance": [
+    "Notification + on-screen badge with Angel name and mode",
+    "Service stops on end; no wake locks outside session",
+    "Test lifecycle"
+   ],
+   "files": [
+    "feature/feature-session/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-14",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Always-visible Stop control and instant revoke",
+   "pri": "P0",
+   "size": "M",
+   "module": "feature/feature-session",
+   "prd": "FR-8",
+   "deps": [
+    "M-09"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "User can end any session instantly.",
+   "acceptance": [
+    "Stop in notification and on-screen badge",
+    "Revoke ends session < 1 s and tears down media",
+    "Audit event emitted"
+   ],
+   "files": [
+    "feature/feature-session/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-10",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Screen share from User device (view only)",
+   "pri": "P0",
+   "size": "L",
+   "module": "feature/feature-screenshare",
+   "prd": "FR-11",
+   "deps": [
+    "F-05",
+    "M-09"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Stream screen to Angel with adaptive quality.",
+   "acceptance": [
+    "MediaProjection consent per session",
+    "Adaptive bitrate; active RAM <= 200 MB on test device",
+    "Interface in core-api; WebRTC details hidden"
+   ],
+   "files": [
+    "feature/feature-screenshare/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-11",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Angel viewer screen with pan and zoom",
+   "pri": "P0",
+   "size": "M",
+   "module": "feature/feature-screenshare",
+   "prd": "FR-11",
+   "deps": [
+    "M-10"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Angel sees User's screen comfortably.",
+   "acceptance": [
+    "Pan/zoom, orientation handling",
+    "Shows connection state"
+   ],
+   "files": [
+    "feature/feature-screenshare/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-12",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Voice channel",
+   "pri": "P0",
+   "size": "M",
+   "module": "feature/feature-comms",
+   "prd": "FR-11",
+   "deps": [
+    "M-10"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Two-way voice during session.",
+   "acceptance": [
+    "Mic permission explained; mute button",
+    "Stops with session"
+   ],
+   "files": [
+    "feature/feature-comms/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-15",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Guidance overlay: arrow, highlight, text",
+   "pri": "P0",
+   "size": "L",
+   "module": "feature/feature-guidance",
+   "prd": "FR-15",
+   "deps": [
+    "F-07",
+    "M-10"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Angel draws; User sees overlays on top of other apps.",
+   "acceptance": [
+    "Overlay permission flow explained in plain language",
+    "Overlay cleared on session end/revoke",
+    "Overlays are non-interactive (cannot capture touches)"
+   ],
+   "files": [
+    "feature/feature-guidance/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-16",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Shortcut: open system setting deep link",
+   "pri": "P0",
+   "size": "M",
+   "module": "feature/feature-shortcuts",
+   "prd": "FR-16,18",
+   "deps": [
+    "M-08"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Angel sends a settings destination; User taps once.",
+   "acceptance": [
+    "Catalogue of safe settings intents (Wi-Fi, display, sound, battery, notifications, accessibility)",
+    "Fallback when intent unavailable on an OEM",
+    "Audit event per shortcut"
+   ],
+   "files": [
+    "feature/feature-shortcuts/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-17",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Shortcut: compose message draft",
+   "pri": "P0",
+   "size": "S",
+   "module": "feature/feature-shortcuts",
+   "prd": "FR-16",
+   "deps": [
+    "M-16"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Angel drafts text; User reviews and sends.",
+   "acceptance": [
+    "Uses ACTION_SENDTO/share intent; never sends automatically",
+    "Audit event"
+   ],
+   "files": [
+    "feature/feature-shortcuts/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-21",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Mask sensitive screens (secure windows, password fields)",
+   "pri": "P0",
+   "size": "M",
+   "module": "feature/feature-screenshare",
+   "prd": "FR-14",
+   "deps": [
+    "M-10"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Sensitive content never reaches the Angel.",
+   "acceptance": [
+    "FLAG_SECURE windows blank; password fields masked where detectable",
+    "Documented limits in MODULE.md"
+   ],
+   "files": [
+    "feature/feature-screenshare/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-23",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Cool-off period for new Angels",
+   "pri": "P0",
+   "size": "S",
+   "module": "core/core-permissions",
+   "prd": "FR-27",
+   "deps": [
+    "M-06"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "New Angels get only Watch/Guide for 24h.",
+   "acceptance": [
+    "Enforced in engine; tests",
+    "Plain-language explanation shown to User"
+   ],
+   "files": [
+    "core/core-permissions/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-25",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Local activity log and viewer",
+   "pri": "P0",
+   "size": "M",
+   "module": "feature/feature-activitylog",
+   "prd": "FR-24",
+   "deps": [
+    "M-08"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Tamper-resistant local log of sessions and actions.",
+   "acceptance": [
+    "Append-only encrypted store; no sensitive content",
+    "Simple list UI; export/share optional later"
+   ],
+   "files": [
+    "feature/feature-activitylog/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-01",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Onboarding flow with plain-language permission explainers",
+   "pri": "P0",
+   "size": "M",
+   "module": "feature/feature-onboarding",
+   "prd": "FR-1",
+   "deps": [
+    "F-10",
+    "M-02"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Guide first-time Users through setup.",
+   "acceptance": [
+    "Each Android permission explained before request",
+    "Large-text mode offered on first screen",
+    "Findings from F-11 applied if available"
+   ],
+   "files": [
+    "feature/feature-onboarding/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-13",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Text chat",
+   "pri": "P1",
+   "size": "M",
+   "module": "feature/feature-comms",
+   "prd": "FR-11",
+   "deps": [
+    "M-10"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Chat during session.",
+   "acceptance": [
+    "Messages not persisted by default; large text"
+   ],
+   "files": [
+    "feature/feature-comms/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-18",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Shortcut: contact search",
+   "pri": "P1",
+   "size": "S",
+   "module": "feature/feature-shortcuts",
+   "prd": "FR-16",
+   "deps": [
+    "M-16"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Open contacts search for a name.",
+   "acceptance": [
+    "Intent-based; no contact data leaves device"
+   ],
+   "files": [
+    "feature/feature-shortcuts/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-19",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Shortcut: maps search",
+   "pri": "P1",
+   "size": "S",
+   "module": "feature/feature-shortcuts",
+   "prd": "FR-16",
+   "deps": [
+    "M-16"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Open maps search for a query.",
+   "acceptance": [
+    "geo: intent; location sharing stays separate"
+   ],
+   "files": [
+    "feature/feature-shortcuts/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-20",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Shortcut: calendar event",
+   "pri": "P1",
+   "size": "S",
+   "module": "feature/feature-shortcuts",
+   "prd": "FR-16",
+   "deps": [
+    "M-16"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Prefilled calendar event the User confirms.",
+   "acceptance": [
+    "Insert-event intent; User confirms"
+   ],
+   "files": [
+    "feature/feature-shortcuts/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-22",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Reconnect and graceful degradation",
+   "pri": "P1",
+   "size": "M",
+   "module": "feature/feature-session",
+   "prd": "FR-13",
+   "deps": [
+    "M-10",
+    "M-12"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Survive network drops.",
+   "acceptance": [
+    "Auto reconnect; degrade frame rate then audio-only"
+   ],
+   "files": [
+    "feature/feature-session/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-24",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Block and report",
+   "pri": "P1",
+   "size": "M",
+   "module": "feature/feature-pairing",
+   "prd": "FR-31",
+   "deps": [
+    "M-05"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "User can block an Angel and report abuse.",
+   "acceptance": [
+    "Block removes grants and ends sessions; report payload excludes screen content"
+   ],
+   "files": [
+    "feature/feature-pairing/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-26",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Accessibility pass",
+   "pri": "P0",
+   "size": "M",
+   "module": "core/core-ui",
+   "prd": "Sec 5.6",
+   "deps": [
+    "M-01",
+    "M-08"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Large text, screen reader, contrast, dark mode across all screens.",
+   "acceptance": [
+    "TalkBack labels on every control; 200% font scale OK",
+    "Checklist in docs/spikes/M-26.md"
+   ],
+   "files": [
+    "core/core-ui/MODULE.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-27",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Performance pass: size, RAM, battery budgets",
+   "pri": "P0",
+   "size": "L",
+   "module": "app",
+   "prd": "Sec 4",
+   "deps": [
+    "M-22",
+    "M-15"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Meet all budgets on target devices.",
+   "acceptance": [
+    "Release build with R8; ABI/AAB split; baseline profile",
+    "Measurements in docs/spikes/M-27.md recorded by human; all within tools/budgets.json"
+   ],
+   "files": [
+    "app",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "M-29",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Session verification code (proposed, needs approval)",
+   "pri": "P1",
+   "size": "M",
+   "module": "feature/feature-consent",
+   "prd": "THREAT_MODEL T2",
+   "deps": [
+    "M-08"
+   ],
+   "status": "todo",
+   "card": true,
+   "goal": "Phone shows a 4-digit code the Angel must provide at session start to prove identity.",
+   "acceptance": [
+    "Code shown on User screen, entered/spoken by Angel before view starts",
+    "Expires in 2 minutes; 3 wrong tries ends request",
+    "Human approved the added friction (THREAT_MODEL Q1: yes, 2026-10-08)"
+   ],
+   "files": [
+    "feature/feature-consent/MODULE.md",
+    "docs/THREAT_MODEL.md"
+   ]
+  },
+  {
+   "id": "M-28",
+   "phase": "Phase 1: MVP (Watch and Guide)",
+   "title": "Closed beta with 10 real families",
+   "pri": "P0",
+   "size": "L",
+   "module": "docs",
+   "prd": "Sec 2.5",
+   "deps": [
+    "M-27",
+    "M-25",
+    "M-23"
+   ],
+   "status": "human",
+   "card": true,
+   "goal": "Validate MVP release criteria.",
+   "acceptance": [
+    "Beta plan, feedback form, success metrics in docs/beta/",
+    "Release criteria from MVP doc evaluated"
+   ],
+   "files": [
+    "docs/PROJECT_SUMMARY.md",
+    "docs/DECISIONS.md"
+   ]
+  },
+  {
+   "id": "A-01",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "Accessibility service shell with policy-compliant disclosure",
+   "pri": "P0",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "A-02",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "Remote tap, swipe, scroll",
+   "pri": "P0",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "A-03",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "Remote text entry, back, home, recents",
+   "pri": "P0",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "A-04",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "Capability: send message (with confirmation)",
+   "pri": "P0",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "A-05",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "Capability: read messages and notifications",
+   "pri": "P0",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "A-06",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "Capability: contacts (hidden-contact list)",
+   "pri": "P1",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "A-07",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "Capability: rotate screen, volume, brightness",
+   "pri": "P1",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "A-08",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "Capability: maps and location sharing",
+   "pri": "P1",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "A-09",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "In-the-moment confirmation framework",
+   "pri": "P0",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "A-10",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "Scam-resistance warnings",
+   "pri": "P0",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "A-11",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "Mid-session capability request flow",
+   "pri": "P1",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "A-12",
+   "phase": "Phase 2: Act (Human Angels)",
+   "title": "Web viewer for Angels",
+   "pri": "P2",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "C-01",
+   "phase": "Phase 3: Capture and Booking",
+   "title": "Remote photo capture with preview and approval",
+   "pri": "P0",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "C-02",
+   "phase": "Phase 3: Capture and Booking",
+   "title": "Remote video capture",
+   "pri": "P1",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "C-03",
+   "phase": "Phase 3: Capture and Booking",
+   "title": "Remote audio recording with indicator",
+   "pri": "P0",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "C-04",
+   "phase": "Phase 3: Capture and Booking",
+   "title": "Local storage and optional share of captures",
+   "pri": "P1",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "C-05",
+   "phase": "Phase 3: Capture and Booking",
+   "title": "Appointment and calendar booking flow",
+   "pri": "P1",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "C-06",
+   "phase": "Phase 3: Capture and Booking",
+   "title": "Optional session recording (off by default)",
+   "pri": "P2",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "AI-01",
+   "phase": "Phase 4: AI Angel and On-Device SLM",
+   "title": "Agent control API shared with human Angels",
+   "pri": "P0",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "AI-02",
+   "phase": "Phase 4: AI Angel and On-Device SLM",
+   "title": "Screen understanding (accessibility tree first)",
+   "pri": "P0",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "AI-03",
+   "phase": "Phase 4: AI Angel and On-Device SLM",
+   "title": "Natural-language goal to plan, shown for approval",
+   "pri": "P0",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "AI-04",
+   "phase": "Phase 4: AI Angel and On-Device SLM",
+   "title": "Step log, pause, stop, human takeover",
+   "pri": "P0",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "AI-05",
+   "phase": "Phase 4: AI Angel and On-Device SLM",
+   "title": "Guardrails: scope, rate limits, no payment/password",
+   "pri": "P0",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "AI-06",
+   "phase": "Phase 4: AI Angel and On-Device SLM",
+   "title": "On-device SLM for intent classification (optional download)",
+   "pri": "P1",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "AI-07",
+   "phase": "Phase 4: AI Angel and On-Device SLM",
+   "title": "SLM-generated prompts for cloud frontier LLM",
+   "pri": "P1",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "AI-08",
+   "phase": "Phase 4: AI Angel and On-Device SLM",
+   "title": "Cloud LLM gateway: free-tier quotas, caching, fallback",
+   "pri": "P1",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "S-01",
+   "phase": "Phase 5: Scale, Polish and Growth",
+   "title": "Multi-language and RTL support",
+   "pri": "P1",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "S-02",
+   "phase": "Phase 5: Scale, Polish and Growth",
+   "title": "Tablet layouts",
+   "pri": "P2",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "S-03",
+   "phase": "Phase 5: Scale, Polish and Growth",
+   "title": "Professional Angel verification",
+   "pri": "P2",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "S-04",
+   "phase": "Phase 5: Scale, Polish and Growth",
+   "title": "Subscription tiers and billing",
+   "pri": "P2",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "S-05",
+   "phase": "Phase 5: Scale, Polish and Growth",
+   "title": "Lawful-authority flow for Users unable to consent",
+   "pri": "P1",
+   "size": "L",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  },
+  {
+   "id": "S-06",
+   "phase": "Phase 5: Scale, Polish and Growth",
+   "title": "Staged rollout, monitoring, crash-free dashboards",
+   "pri": "P0",
+   "size": "M",
+   "module": "TBD",
+   "prd": "see MVP doc",
+   "deps": [],
+   "status": "planned",
+   "card": false,
+   "goal": "",
+   "acceptance": [],
+   "files": []
+  }
+ ]
+}
