@@ -1,21 +1,25 @@
 /**
  * FILE:    MainActivity.kt
  * MODULE:  app
- * PURPOSE: Placeholder launcher activity; replaced by nav host at M-02/M-01.
- * DEPENDS: androidx.activity.compose, material3
+ * PURPOSE: Placeholder launcher screen (platform views only, no libraries) so the first APK builds and installs.
+ * DEPENDS: android.app.Activity
  * USED BY: AndroidManifest.xml
- * NOTES:   No logic here; keep the shell thin.
+ * NOTES:   Replaced by the Compose nav host at M-02/M-01 once F-10 adds the UI kit.
  */
 package com.angel.remoteassist
 
+import android.app.Activity
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
+import android.view.Gravity
+import android.widget.TextView
 
-class MainActivity : ComponentActivity() {
+class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { Text("Angel") }
+        setContentView(TextView(this).apply {
+            text = "Angel\nbuild 0.1.0 - setup OK"
+            textSize = 28f
+            gravity = Gravity.CENTER
+        })
     }
 }

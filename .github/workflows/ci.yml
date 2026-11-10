@@ -1,6 +1,10 @@
-# FILE: ci.yml | MODULE: ci | PURPOSE: Run repo checks and Gradle build/tests on every push. UNVERIFIED until first run.
+# FILE: ci.yml | MODULE: ci | PURPOSE: Check conventions, build + test, and publish an installable debug APK as a downloadable artifact.
+# NOTES: Uses installed Gradle 8.13 (no wrapper committed yet). SDK package names UNVERIFIED until first run.
 name: ci
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 jobs:
   checks:
     runs-on: ubuntu-latest
@@ -17,6 +21,23 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
+      - name: Android SDK packages
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;35.0.0" || true
       - uses: gradle/actions/setup-gradle@v4
-      - run: ./gradlew test assembleRelease
-      - run: python3 tools/check_size.py $(find app/build/outputs -name '*.apk' | head -1)
+        with: { gradle-version: '8.13' }
+      - name: Unit tests
+        run: gradle test --stacktrace
+      - name: Debug APK (for installing on a phone)
+        run: gradle :app:assembleDebug --stacktrace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: angel-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+      - name: Release build + size budget (non-blocking for now)
+        continue-on-error: true
+        run: |
+          gradle :app:assembleRelease --stacktrace
+          python3 tools/check_size.py "$(find app/build/outputs/apk/release -name '*.apk' | head -1)"

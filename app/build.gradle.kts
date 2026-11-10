@@ -1,16 +1,24 @@
 // FILE:    build.gradle.kts
 // MODULE:  app
-// PURPOSE: Thin application shell: release config (R8 + resource shrinking), wires feature modules.
-// DEPENDS: all core/feature/data modules
-// USED BY: Gradle
-// NOTES:   UNVERIFIED config. Release must stay within tools/budgets.json (download 30 MB). Add abi splits at M-27.
-plugins { alias(libs.plugins.android.application); alias(libs.plugins.kotlin.android); alias(libs.plugins.kotlin.compose) }
+// PURPOSE: Thin application shell. First APK has NO third-party dependencies (smallest, lowest build risk).
+// DEPENDS: none yet (feature modules are wired in as tasks add them)
+// USED BY: Gradle, CI (assembleDebug -> installable test APK)
+// NOTES:   Release uses R8 + resource shrinking. Debug APK is auto-signed so it installs on any phone for testing.
+plugins { alias(libs.plugins.android.application); alias(libs.plugins.kotlin.android) }
 android {
-  namespace = "com.angel.remoteassist"; compileSdk = 36
-  defaultConfig { applicationId = "com.angel.remoteassist"; minSdk = 29; targetSdk = 36; versionCode = 1; versionName = "0.1.0" }
-  buildTypes { release { isMinifyEnabled = true; isShrinkResources = true } }
-}
-dependencies {
-  implementation(project(":core:core-ui"))
-  implementation(platform(libs.compose.bom)); implementation(libs.compose.material3); implementation(libs.activity.compose)
+  namespace = "com.angel.remoteassist"
+  compileSdk = 36
+  defaultConfig {
+    applicationId = "com.angel.remoteassist"
+    minSdk = 29; targetSdk = 36
+    versionCode = 1; versionName = "0.1.0"
+  }
+  buildTypes {
+    release {
+      isMinifyEnabled = true; isShrinkResources = true
+      proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+    }
+  }
+  compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
+  kotlinOptions { jvmTarget = "17" }
 }

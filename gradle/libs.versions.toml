@@ -1,14 +1,14 @@
-# UNVERIFIED: placeholder versions. At task F-01 the agent/human must verify the latest stable
-# AGP, Kotlin, Compose BOM and WebRTC artifact, then record them in docs/DECISIONS.md.
+# Versions checked against developer.android.com / kotlinlang.org release pages on 2026-11-10 (see docs/DECISIONS.md).
+# Combination is NOT yet proven by a real build: the first CI run (task F-04) is the proof.
 [versions]
-agp = "UNVERIFIED-set-at-F-01"
-kotlin = "UNVERIFIED-set-at-F-01"
-composeBom = "UNVERIFIED-set-at-F-01"
+agp = "8.13.2"        # AGP 8.13.x: Gradle 8.13, JDK 17, build-tools 35, supports API 36.1
+kotlin = "2.3.20"     # stable (2026-03-16); AGP 8.13.2 notes Kotlin 2.3 support. Kotlin 2.4.x also exists
+# Compose is not used by the first APK. Verified for F-10: compose.ui 1.12.1, compose.material3 1.4.0 (stable, 2026-11-04)
+composeUi = "1.12.1"
+composeMaterial3 = "1.4.0"
 [libraries]
-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
-compose-material3 = { module = "androidx.compose.material3:material3" }
-compose-ui = { module = "androidx.compose.ui:ui" }
-activity-compose = { module = "androidx.activity:activity-compose" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "composeUi" }
+compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
